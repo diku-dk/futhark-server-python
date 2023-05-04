@@ -35,7 +35,9 @@ jobs:
         python setup.py install
 
     - name: Run tests
-      run : python test.py
+      run : |
+        futhark c --server test.fut
+        python test.py
 
   pip:
     runs-on: ubuntu-latest
