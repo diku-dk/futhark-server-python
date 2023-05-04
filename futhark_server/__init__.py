@@ -13,6 +13,7 @@ class Server:
         self.proc = subprocess.Popen([exe] + list(opts),
                                      stdin=subprocess.PIPE,
                                      stdout=subprocess.PIPE,
+                                     shell=False,
                                      stderr=None,
                                      text=True)
         self._read_response()

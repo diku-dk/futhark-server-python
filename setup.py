@@ -15,7 +15,7 @@ setup(name='futhark-server',
           "License :: OSI Approved :: ISC License (ISCL)",
           "Operating System :: OS Independent",
       ],
-      python_requires='>=3.6',
+      python_requires='>=3.7',
       install_requires=[
           'futhark_data'
       ],
