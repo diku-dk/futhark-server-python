@@ -17,6 +17,7 @@ setup(name='futhark-server',
       ],
       python_requires='>=3.7',
       install_requires=[
+          'numpy',
           'futhark_data'
       ],
       zip_safe=True)
