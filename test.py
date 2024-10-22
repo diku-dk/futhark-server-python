@@ -48,5 +48,15 @@ class Test(unittest.TestCase):
         with self.assertRaises(futhark_server.Failure):
             self.server.cmd_call('does_not_exist')
 
+    def test_put_i64(self):
+        self.server.put_value('v', np.int64(1337))
+        self.assertEqual(self.server.get_value('v'),
+                         np.int64(1337))
+
+    def test_put_arr_i32(self):
+        arr = np.array([1,2,3],dtype=np.int32)
+        self.server.put_value('v', arr)
+        self.assertEqual(self.server.get_value('v').tolist(), arr.tolist())
+
 if __name__ == '__main__':
     unittest.main()

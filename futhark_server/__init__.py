@@ -80,11 +80,13 @@ class Server:
     def cmd_restore(self, file, *pairs):
         """Restore Futhark value from file.
 
-        The 'pairs' argument must be a list of pairs of unused
-        variable names and types.
+        The 'pairs' must be pairs of unused variable names and types.
 
         """
-        self.cmd('restore', file, *[ x for p in pairs for x in p])
+        args = []
+        for x,y in pairs:
+            args += [x,y]
+        self.cmd('restore', file, *args)
 
     def cmd_store(self, file, *vs):
         self.cmd('store', file, *vs)
@@ -146,7 +148,29 @@ class Server:
                 return val
         with tempfile.NamedTemporaryFile() as f:
             self.cmd_store(f.name, v)
-            return tuple(map(unpack, futhark_data.load(f)))
+            vs = list(map(unpack, futhark_data.load(f)))
+            if len(vs) == 1:
+                return vs[0]
+            else:
+                return tuple(vs)
+
+    def put_value(self, var, val):
+        """Create Futhark variable with given value.
+
+        The value must be a NumPy value of a NumPy type corresponding
+        to a Futhark primitive or array of primitives. Raises
+        Exception otherwise.
+
+        """
+
+        rank = len(val.shape)
+        primname = futhark_data.numpy_type_to_type_name(val.dtype)
+        t = rank * "[]" + primname
+
+        with tempfile.NamedTemporaryFile() as f:
+            futhark_data.dump(val, f, binary=True)
+            f.flush()
+            self.cmd_restore(f.name, (var,t))
 
     def get_value_bytes(self, v):
         """Retrieve byte representation of Futhark value."""
