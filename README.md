@@ -9,13 +9,13 @@ manner than through an FFI.
 ## Basic usage
 
 First compile a Futhark program `foo.fut` to a server-mode binary with
-e.g. `futhark c --server`. Then instantiate a `futhark_server.Server`
-object:
+e.g. `futhark c --server foo.fut`. Then instantiate a
+`futhark_server.Server` object:
 
 ```Python
 import futhark_server
 
-with futhark_server.Server('./test') as server:
+with futhark_server.Server('./foo) as server:
   ...
 ```
 
