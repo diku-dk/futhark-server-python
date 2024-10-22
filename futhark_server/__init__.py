@@ -7,6 +7,23 @@ class Failure(Exception):
     pass
 
 class Server:
+    """An instance of this class represents a running Futhark server.
+    When created, it is passed the path to a server executable and
+    optionally some options.
+
+    Each command supported in the server protocol is exposed as a
+    method on this class, prefixed with cmd_.
+
+    Further, some convenience facilities for accessing values are also
+    provided.
+
+    The exception Failure is raised when a command fails.
+
+    The exception Exception is raised when the server process
+    terminates unexpectedly.
+
+    """
+
     def __init__(self, exe, *opts):
         self.exe = opts
         self.opts = opts
@@ -41,6 +58,12 @@ class Server:
             ls = ls + [l[:-1]] # Remove final \n
 
     def cmd(self, *args):
+        """Send a raw command to the server.
+
+        This is mostly useful when the server protocol has been
+        extended without this library having received similar
+        extensions. Use the specific command methods in all other
+        cases."""
         self.proc.stdin.write(' '.join(args) + '\n')
         self.proc.stdin.flush()
         return self._read_response()
@@ -55,6 +78,12 @@ class Server:
         return self.cmd('call', entry, *vs)
 
     def cmd_restore(self, file, *pairs):
+        """Restore Futhark value from file.
+
+        The 'pairs' argument must be a list of pairs of unused
+        variable names and types.
+
+        """
         self.cmd('restore', file, *[ x for p in pairs for x in p])
 
     def cmd_store(self, file, *vs):
@@ -103,6 +132,12 @@ class Server:
         self.cmd('project', newname, name, field)
 
     def get_value(self, v):
+        """Retrieve Futhark value in given variable.
+
+        This only produces a meaningful value if the type of the value
+        is non-opaque (i.e., a primitive or array of primitives).
+
+        """
         def unpack(val):
             if len(val.shape) == 0:
                 # Convert rank 0 arrays to scalars.
@@ -114,11 +149,18 @@ class Server:
             return tuple(map(unpack, futhark_data.load(f)))
 
     def get_value_bytes(self, v):
+        """Retrieve byte representation of Futhark value."""
         with tempfile.NamedTemporaryFile() as f:
             self.cmd_store(f.name, v)
             return f.read()
 
     def put_value_bytes(self, bs, pairs):
+        """Construct Futhark value from byte representation.
+
+        The 'pairs' argument must be a list of pairs of names and
+        types.
+
+        """
         with tempfile.NamedTemporaryFile() as f:
             f.write(bs)
             f.flush()

@@ -44,5 +44,9 @@ class Test(unittest.TestCase):
         bs2 = self.server.get_value_bytes('v1')
         self.assertEqual(bs, bs2)
 
+    def test_exception(self):
+        with self.assertRaises(futhark_server.Failure):
+            self.server.cmd_call('does_not_exist')
+
 if __name__ == '__main__':
     unittest.main()
