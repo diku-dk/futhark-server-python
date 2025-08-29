@@ -15,7 +15,7 @@ e.g. `futhark c --server foo.fut`. Then instantiate a
 ```Python
 import futhark_server
 
-with futhark_server.Server('./foo) as server:
+with futhark_server.Server('./foo') as server:
   ...
 ```
 
