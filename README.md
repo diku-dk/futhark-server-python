@@ -20,5 +20,5 @@ with futhark_server.Server('./foo') as server:
 ```
 
 The `Server` class has various methods for interacting with the
-server. In particular, every servr protocol command `foo` has an
+server. In particular, every serer protocol command `foo` has an
 associated method `cmd_foo`.
