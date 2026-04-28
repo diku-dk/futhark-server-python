@@ -136,8 +136,9 @@ class Server:
     def get_value(self, v):
         """Retrieve Futhark value in given variable.
 
-        This only produces a meaningful value if the type of the value
-        is non-opaque (i.e., a primitive or array of primitives).
+        This only produces a meaningful value if the type of the value is
+        non-opaque (i.e., a primitive, array of primitives, or tuple of
+        primitives).
 
         """
         def unpack(val):
