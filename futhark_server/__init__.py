@@ -100,8 +100,8 @@ class Server:
     def cmd_inputs(self, entry):
         return self.cmd('inputs', entry)
 
-    def cmd_outputs(self, entry):
-        return self.cmd('outputs', entry)
+    def cmd_output(self, entry):
+        return self.cmd('output', entry)
 
     def cmd_clear(self):
         self.cmd('clear')
