@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(name='futhark-server',
-      version='1.0.0',
+      version='1.0.1',
       url='https://github.com/diku-dk/futhark-server-python',
       license='ISC',
       author='Troels Henriksen',

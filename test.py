@@ -58,5 +58,12 @@ class Test(unittest.TestCase):
         self.server.put_value('v', arr)
         self.assertEqual(self.server.get_value('v').tolist(), arr.tolist())
 
+    def test_get_pair(self):
+        self.server.put_value('v', np.int32(42))
+        self.server.cmd_call('get_pair', 'out', 'v')
+        x, y = self.server.get_value('out')
+        self.assertEqual(x, np.int32(43))
+        self.assertEqual(y, np.int32(44))
+
 if __name__ == '__main__':
     unittest.main()
